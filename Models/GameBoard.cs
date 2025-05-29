@@ -14,6 +14,7 @@ namespace HP_LoveCards.Models
 
         public List<Card> Cards { get; private set; }
 
+        //Singleton gameBoard
         private GameBoard()
         {
             GenerateCards();

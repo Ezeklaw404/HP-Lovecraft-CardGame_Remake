@@ -8,6 +8,7 @@ namespace HP_LoveCards.Models
 {
     public class CardTemplate
     {
+        //Flyweight for the card, sharing the const data.
         public readonly string cardBack = "cardback.png";
         public readonly string imagePath;
         public readonly Monster cardType;
@@ -20,6 +21,7 @@ namespace HP_LoveCards.Models
         }
     }
 
+    //My different monsters, as this is where they are used/originate from I added them into this file
     public enum Monster 
     {
         Azathoth, Cthulhu, Cultist, Dagon, ElderSign, MiGo,

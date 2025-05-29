@@ -6,7 +6,7 @@
 
 
     <VerticalStackLayout>
-        
+
         <Button Text="Reset Game" 
             Clicked="OnResetClicked"
             HorizontalOptions="Center"

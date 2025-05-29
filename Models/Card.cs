@@ -13,7 +13,7 @@ namespace HP_LoveCards.Models
         public CardTemplate Template { get; set; }
         private bool isFlipped;
 
-
+        //Observer pattern, clicking on an imageButton it will swap the bool value, changing the Source to the flipside
         public bool IsFlipped
         {
             get => isFlipped;
