@@ -17,23 +17,20 @@ namespace HP_LoveCards.Models
         //Singleton gameBoard
         private GameBoard()
         {
-            GenerateCards();
+            Cards = new List<Card>();
         }
 
-        public void NewGame()
-        {
-            GenerateCards();
-        }
 
-        public void GenerateCards()
+
+        public void GenerateCards(Publisher publisher)
         {
             var cards = new List<Card>();
             int id = 0;
 
             for (int i = 0; i < PAIRS_COUNT; i++)
             {
-                cards.Add(new Card(id++, new CardTemplate(i)));
-                cards.Add(new Card(id++, new CardTemplate(i)));
+                cards.Add(new Card(id++, CardFactory.GetTemplate(i), publisher));
+                cards.Add(new Card(id++, CardFactory.GetTemplate(i), publisher));
             }
 
             // Shuffle cards

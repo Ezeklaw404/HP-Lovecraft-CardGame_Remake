@@ -11,9 +11,7 @@ namespace HP_LoveCards
             InitializeComponent();
             BindingContext = new GameViewModel();
         }
-        //Observer Pattern: data binding
-        //Sigleton Pattern: Create only 1 gameBoard.
-        //Flyweight: cuz i gotta and i am makeing cards with similar fields
+
 
         protected override void OnAppearing()
         {
@@ -21,6 +19,7 @@ namespace HP_LoveCards
 
             if (BindingContext is GameViewModel vm)
             {
+                vm.CardBtn.Clear();
                 _GameBoard.Children.Clear(); // in case it's reappearing
 
                 int cols = 5;
@@ -39,6 +38,7 @@ namespace HP_LoveCards
                         var imageButton = new ImageButton
                         {
                             BindingContext = card,
+                            Source = card.ImageSource,
                             Aspect = Aspect.AspectFit,
                             BackgroundColor = Colors.Transparent,
                         };
@@ -49,10 +49,12 @@ namespace HP_LoveCards
                         // Hook up click behavior
                         imageButton.Clicked += (s, e) =>
                         {
-                            vm.FlipCardCommand.Execute(card);
+                            vm.FlipCard(card);
+                            //imageButton.Source = card.ImageSource;
                         };
 
                         _GameBoard.Children.Add(imageButton);
+                        vm.CardBtn.Add(imageButton);
                         Grid.SetRow(imageButton, row);
                         Grid.SetColumn(imageButton, col);
                     }
@@ -62,9 +64,9 @@ namespace HP_LoveCards
 
         private void OnResetClicked(object sender, EventArgs e)
         {
-            if (BindingContext is GameViewModel vm)
+            if (BindingContext is GameViewModel viewModel)
             {
-                vm.NewGame();
+                viewModel.NewGame();
                 OnAppearing(); // redraw the UI
             }
         }
@@ -74,3 +76,12 @@ namespace HP_LoveCards
 
 }
 
+
+
+
+//publisher - observer pattern
+//list of observers,
+//unsubscribe
+//subscribe
+//update
+//invoke

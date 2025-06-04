@@ -10,43 +10,55 @@ using HP_LoveCards.Models;
 
 namespace HP_LoveCards.ViewModels
 {
-    public class GameViewModel : INotifyPropertyChanged
+    public class GameViewModel : HP_LoveCards.Models.ISubscriber
     {
         public ObservableCollection<Card> Cards { get; set; }
-        public ICommand FlipCardCommand { get; }
+        public List<ImageButton> CardBtn { get; set; }
+
+        private Publisher publisher;
 
         public GameViewModel()
         {
+            publisher = new();
             LoadCards();
-            FlipCardCommand = new Command<Card>(FlipCard);
+
         }
 
         private void LoadCards()
         {
-            GameBoard.Instance.GenerateCards();
+            GameBoard.Instance.GenerateCards(publisher);
             Cards = new ObservableCollection<Card>(GameBoard.Instance.Cards);
-            OnPropertyChanged(nameof(Cards));
+            CardBtn = new List<ImageButton>();
+
+            SubscribeToCards();
+        }
+        private void SubscribeToCards()
+        {
+            foreach (var card in Cards)
+                publisher.Subscribe(this);
         }
 
-        private void FlipCard(Card card)
+        public void FlipCard(Card card)
         {
-            if (card != null)
-                card.IsFlipped = !card.IsFlipped;
+            card.Flip();
         }
 
         public void NewGame()
         {
-            GameBoard.Instance.NewGame();
+            GameBoard.Instance.GenerateCards(publisher);
 
             Cards.Clear();
             foreach (var card in GameBoard.Instance.Cards)
                 Cards.Add(card);
         }
 
+        public void Update(Card card)
+        {
+            var btn = CardBtn.FirstOrDefault(b => b.BindingContext == card);
+            if (btn != null)
+                btn.Source = card.ImageSource;
+        }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        void OnPropertyChanged(string propName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
     }
 }

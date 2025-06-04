@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace HP_LoveCards.Models
 {
-    public class Game
+    public interface IPublisher
     {
-        public GameBoard Board { get; }
-
-        public Game()
-        {
-            Board = GameBoard.Instance;
-        }
+        void Subscribe(ISubscriber observer);
+        void Unsubscribe(ISubscriber observer);
+        void Notify(Card card);
     }
 }

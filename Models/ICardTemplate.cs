@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace HP_LoveCards.Models
 {
-    public class Game
+    public interface ICardTemplate
     {
-        public GameBoard Board { get; }
-
-        public Game()
-        {
-            Board = GameBoard.Instance;
-        }
+        public const string CardBack = "cardback.png";
+        string ImagePath {  get; }
+        Monster CardType { get; }
     }
 }

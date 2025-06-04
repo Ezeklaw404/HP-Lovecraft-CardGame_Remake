@@ -7,38 +7,40 @@ using System.Threading.Tasks;
 
 namespace HP_LoveCards.Models
 {
-    public class Card : INotifyPropertyChanged
+    public class Card
     {
         public int Id {  get; set; }
-        public CardTemplate Template { get; set; }
+        public ICardTemplate Template { get; }
+        public readonly IPublisher publisher;
         private bool isFlipped;
+        public bool IsFlipped => isFlipped;
+        public string ImageSource => IsFlipped ? Template.ImagePath : ICardTemplate.CardBack;
 
-        //Observer pattern, clicking on an imageButton it will swap the bool value, changing the Source to the flipside
-        public bool IsFlipped
-        {
-            get => isFlipped;
-            set
-            {
-                if (isFlipped != value)
-                {
-                    isFlipped = value;
-                    OnPropertyChanged(nameof(IsFlipped));
-                    OnPropertyChanged(nameof(ImageSource));
-                }
-            }
-        }
 
-        public string ImageSource => IsFlipped ? Template.imagePath : Template.cardBack;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        public Card(int id, CardTemplate template)
+        public Card(int id, ICardTemplate template, IPublisher publisher)
         {
             Id = id;
             Template = template;
-            IsFlipped = false;
+            isFlipped = false;
+            this.publisher = publisher;
         }
+
+        public void Flip()
+        {
+            isFlipped = !isFlipped;
+            publisher.Notify(this);
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }
+
+
